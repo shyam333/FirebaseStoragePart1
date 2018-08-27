@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -17,13 +18,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    Button button;
+    Button button1;
+    ImageView imageView;
+
 
     private StorageReference mStorageRef;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -36,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        button = (Button)findViewById(R.id.btn);
+        button1 = (Button)findViewById(R.id.btn1);
+        imageView = (ImageView)findViewById(R.id.imageView);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -66,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
               public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                   Toast.makeText(MainActivity.this,"Upload Success",Toast.LENGTH_SHORT).show();
+
+                  Uri downloaduri = taskSnapshot.getDownloadUrl();
+
+                  Picasso.get().load(downloaduri).into(imageView);
+
 
               }
           });
